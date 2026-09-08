@@ -3,7 +3,7 @@ import { Box, Container, TextField, Typography } from '@mui/material'
 export default function Checkout() {
   return (
     <Container sx={{ py: 8 }}>
-      <Box component="form">
+      <Box component="form" sx={{ display: 'grid', gap: 2 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           Kassa
         </Typography>
@@ -13,6 +13,14 @@ export default function Checkout() {
           label="Namn"
           name="customerName"
           autoComplete="name"
+        />
+
+        <TextField
+          fullWidth
+          label="E-post"
+          name="email"
+          type="email"
+          autoComplete="email"
         />
       </Box>
     </Container>
