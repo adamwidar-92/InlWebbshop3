@@ -30,6 +30,13 @@ export default function Checkout() {
           type="tel"
           autoComplete="tel"
         />
+
+        <TextField
+          fullWidth
+          label="Adress"
+          name="address"
+          autoComplete="street-address"
+        />
       </Box>
     </Container>
   )
