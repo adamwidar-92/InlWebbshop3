@@ -22,6 +22,14 @@ export default function Checkout() {
           type="email"
           autoComplete="email"
         />
+
+        <TextField
+          fullWidth
+          label="Telefonnummer"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+        />
       </Box>
     </Container>
   )
