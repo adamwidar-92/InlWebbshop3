@@ -1,20 +1,22 @@
 import {
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
   Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
 } from '@mui/material'
-import { Product } from '../types/Product'
 import { Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
+import type { Product } from '../types/Product'
 
 interface ProductCardProps {
   product: Product
 }
-
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart()
+
   return (
     <Card
       sx={{
@@ -72,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           Visa mer
         </Button>
-        <Button size="small" variant="contained" color="primary">
+        <Button onClick={() => addToCart(product)} size="small" variant="contained" color="primary">
           Lägg i kundvagn
         </Button>
       </CardActions>

@@ -1,22 +1,25 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const pages = ['Admin'];
 
 function Header() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const { totalQuantity } = useCart()
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -102,8 +105,10 @@ function Header() {
             ))}
           </Box>
 
-          <IconButton color="inherit" sx={{ ml: 'auto' }}>
+          <IconButton onClick={() => navigate('/checkout')} color="inherit" sx={{ ml: 'auto' }} aria-label="Gå till kundvagnen">
+            <Badge badgeContent={totalQuantity} color="error">
             <ShoppingCartIcon />
+            </Badge>
           </IconButton>
         </Toolbar>
       </Container>
