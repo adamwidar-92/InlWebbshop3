@@ -1,4 +1,4 @@
-import { Box, Container, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 
 export default function Checkout() {
   return (
@@ -9,6 +9,7 @@ export default function Checkout() {
         </Typography>
 
         <TextField
+          required
           fullWidth
           label="Namn"
           name="customerName"
@@ -17,6 +18,7 @@ export default function Checkout() {
 
         <TextField
           fullWidth
+          required
           label="E-post"
           name="email"
           type="email"
@@ -24,19 +26,41 @@ export default function Checkout() {
         />
 
         <TextField
+          required
           fullWidth
           label="Telefonnummer"
           name="phone"
           type="tel"
           autoComplete="tel"
+          helperText="Ange ett svenskt telefonnummer, t.ex. 0701234567 eller +46701234567"
+          slotProps={{
+            htmlInput: {
+              pattern: "(?:0[0-9]{9}|[+]46[0-9]{9})",
+            },
+          }}
         />
 
+
+
         <TextField
+          required
           fullWidth
           label="Adress"
           name="address"
           autoComplete="street-address"
+          helperText="Ange gata och gatunummer"
+          slotProps={{
+            htmlInput: {
+              minLength: 5,
+            },
+          }}
         />
+
+        {/*Skickar formuläret och startar validering */}
+        <Button type="submit" variant="contained">
+          Slutför köp
+        </Button>
+
       </Box>
     </Container>
   )
