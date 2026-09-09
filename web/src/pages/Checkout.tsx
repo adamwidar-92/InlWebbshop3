@@ -43,10 +43,17 @@ export default function Checkout() {
 
 
         <TextField
+          required
           fullWidth
           label="Adress"
           name="address"
           autoComplete="street-address"
+          helperText="Ange gata och gatunummer"
+          slotProps={{
+            htmlInput: {
+              minLength: 5,
+            },
+          }}
         />
 
         {/*Skickar formuläret och startar validering */}
