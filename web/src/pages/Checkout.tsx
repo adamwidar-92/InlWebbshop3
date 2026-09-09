@@ -18,6 +18,7 @@ export default function Checkout() {
 
         <TextField
           fullWidth
+          required
           label="E-post"
           name="email"
           type="email"
