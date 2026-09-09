@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Box } from '@mui/material'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
-import Home from './pages/Home'
-import Products from './pages/Products'
+import Admin from './pages/Admin'
 import Checkout from './pages/Checkout'
 import Confirmation from './pages/Confirmation'
-import Admin from './pages/Admin'
+import HomePage from './pages/HomePage'
+import ProductPage from './pages/ProductPage'
+import Products from './pages/Products'
 
 export default function App() {
   return (
@@ -14,8 +15,9 @@ export default function App() {
         <Header />
         <Box component="main" sx={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
             <Route path="/admin" element={<Admin />} />
