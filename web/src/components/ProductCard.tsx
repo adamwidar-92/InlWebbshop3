@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import type { Product } from '../types/Product'
