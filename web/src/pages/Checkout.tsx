@@ -26,12 +26,21 @@ export default function Checkout() {
         />
 
         <TextField
+          required
           fullWidth
           label="Telefonnummer"
           name="phone"
           type="tel"
           autoComplete="tel"
+          helperText="Ange ett svenskt telefonnummer, t.ex. 0701234567 eller +46701234567"
+          slotProps={{
+            htmlInput: {
+              pattern: "(?:0[0-9]{9}|[+]46[0-9]{9})",
+            },
+          }}
         />
+
+
 
         <TextField
           fullWidth
