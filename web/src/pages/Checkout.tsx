@@ -1,4 +1,4 @@
-import { Box, Container, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 
 export default function Checkout() {
   return (
@@ -9,6 +9,7 @@ export default function Checkout() {
         </Typography>
 
         <TextField
+          required
           fullWidth
           label="Namn"
           name="customerName"
@@ -37,6 +38,12 @@ export default function Checkout() {
           name="address"
           autoComplete="street-address"
         />
+
+        {/*Skickar formuläret och startar validering */}
+        <Button type="submit" variant="contained">
+          Slutför köp
+        </Button>
+
       </Box>
     </Container>
   )
