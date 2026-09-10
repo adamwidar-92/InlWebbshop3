@@ -1,8 +1,10 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import { Box, Button, Container, IconButton, TextField, Typography } from '@mui/material'
 import { useCart } from '../context/CartContext'
 
 export default function Checkout() {
-  const { items } = useCart()
+  const { items, removeFromCart, updateQuantity } = useCart()
 
   let totalPrice = 0
 
@@ -33,12 +35,26 @@ export default function Checkout() {
               )}
               <Box>
                 <Typography sx={{ fontWeight: 'bold' }}>{item.name}</Typography>
-                <Typography>Antal: {item.quantity}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                  <IconButton onClick={() => updateQuantity(item.id, item.quantity - 1)} size="small" disabled={item.quantity <= 1} aria-label="Minska antal" sx={{ border: 1, borderColor: 'divider' }}>
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                  <Typography>Antal: {item.quantity}</Typography>
+                  <IconButton onClick={() => updateQuantity(item.id, item.quantity + 1)} size="small" aria-label="Öka antal" sx={{ border: 1, borderColor: 'divider' }}>
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </Box>
                 <Typography>Pris: {item.price} kr/st</Typography>
               </Box>
             </Box>
-            <Typography sx={{ fontWeight: 'bold', textAlign: 'right'}}>
-              Summa: {item.price * item.quantity} kr</Typography>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                Summa: {item.price * item.quantity} kr
+              </Typography>
+              <Button onClick={() => removeFromCart(item.id)} color="error" size="small">
+                Ta bort
+              </Button>
+            </Box>
           </Box>
         ))
         )}
