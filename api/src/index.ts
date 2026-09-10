@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 
+
 // Beskriver en produkt som skickas från kundvagnen
 interface CreateOrderItemRequest {
   productId: number;
@@ -44,6 +45,12 @@ app.post('/api/orders', (req, res) => {
       error: "Alla leveransuppgifter måste fyllas i",
     })
   }
+  // Kontrollerar att kundvagnen innehåller minst en produkt
+  if (!Array.isArray(orderData.items) || orderData.items.length === 0) {
+    return res.status(400).json({
+      error: 'Kundvagnen måste innehålla minst en produkt',
+    });
+  }
 
   return res.status(200).json({
     message: 'Orderdata mottagen',
@@ -54,4 +61,4 @@ app.post('/api/orders', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
-});
+})
