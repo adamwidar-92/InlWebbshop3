@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { randomUUID } from 'node:crypto';
 
 
 // Beskriver en produkt som skickas från kundvagnen
@@ -15,6 +16,10 @@ interface CreateOrderRequest {
   phone: string;
   address: string;
   items: CreateOrderItemRequest[];
+}
+// Skapar ett unikt ordernummer
+function createOrderNumber(): string {
+  return `ORD-${randomUUID().toUpperCase()}`;
 }
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -65,9 +70,11 @@ app.post('/api/orders', (req, res) => {
       error: 'Varje produkt måste ha ett giltigt produkt-id och antal',
     });
   }
+  const orderNumber = createOrderNumber();
 
   return res.status(200).json({
     message: 'Orderdata mottagen',
+    orderNumber: orderNumber,
     order: orderData,
   })
 
