@@ -7,6 +7,9 @@ interface CartContextValue {
   items: CartItem[]
   addToCart: (product: Product) => void
   totalQuantity: number
+  removeFromCart: (productId: number) => void
+  updateQuantity: (productId: number, newQuantity: number) => void
+
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined)
@@ -60,6 +63,24 @@ export function CartProvider({ children }: CartProviderProps) {
     })
   }
 
+  function removeFromCart(productId: number) {
+    setItems((currentItems) =>
+      currentItems.filter((item) => item.id !== productId),
+    )
+  }
+
+  function updateQuantity(productId: number, newQuantity: number) {
+    if (newQuantity < 1) {
+      return undefined
+    }
+
+    setItems((currentItems) => 
+      currentItems.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item,
+      )
+    )
+  }
+
   let totalQuantity = 0
 
   for (const item of items) {
@@ -67,7 +88,7 @@ export function CartProvider({ children }: CartProviderProps) {
   }
 
   return (
-    <CartContext.Provider value={{ items, addToCart, totalQuantity }}>
+    <CartContext.Provider value={{ items, addToCart, totalQuantity, removeFromCart, updateQuantity }}>
       {children}
     </CartContext.Provider>
   )
