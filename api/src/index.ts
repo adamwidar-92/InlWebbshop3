@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import 'dotenv/config';
@@ -27,14 +28,24 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Skapar anslutningen till DB
 const prisma = new PrismaClient();
+=======
+import cors from 'cors'
+import express from 'express'
+import productsRouter from './routes/products.js'
 
-app.use(cors());
-app.use(express.json());
+const app = express()
+const PORT = 3001
+>>>>>>> feature/products-seed
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
+app.use(cors())
+app.use(express.json())
+
+// Routes
+app.use('/api/products', productsRouter)
+
+app.get('/', (req, res) => {
+  res.json({ message: 'API:et fungerar!' })
+})
 
 app.post('/api/orders', async (req, res) => {
   const orderData = req.body as CreateOrderRequest
@@ -150,5 +161,10 @@ app.post('/api/orders', async (req, res) => {
 })
 
 app.listen(PORT, () => {
+<<<<<<< HEAD
   console.log(`API running on port ${PORT}`);
 });
+=======
+  console.log(`Server körs på http://localhost:${PORT}`)
+})
+>>>>>>> feature/products-seed

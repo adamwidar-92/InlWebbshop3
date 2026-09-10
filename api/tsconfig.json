@@ -14,9 +14,13 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "."
   },
+<<<<<<< HEAD
   "include": [
     "src/**/*"
   ]
+=======
+  "include": ["src/**/*", "prisma/**/*", "prisma.config.ts"]
+>>>>>>> feature/products-seed
 }

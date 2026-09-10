@@ -5,14 +5,14 @@ export const products: Product[] = [
     id: 1,
     name: 'Produkt 1',
     price: 299,
-    description: 'En fantastisk produkt',
+    description: 'En dosa snus',
     image: '/product1.jpg',
   },
   {
     id: 2,
     name: 'Produkt 2',
     price: 399,
-    description: 'En annan bra produkt',
+    description: 'snusdosa ',
     image: '/product2.jpg',
   },
   {
