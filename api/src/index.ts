@@ -26,6 +26,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.post('/api/orders', (req, res) => {
+  const orderData = req.body as CreateOrderRequest
+
+  return res.status(200).json({
+    message: 'Orderdata mottagen',
+    order: orderData,
+  })
+})
+
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
