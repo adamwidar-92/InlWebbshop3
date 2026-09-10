@@ -91,11 +91,25 @@ app.post('/api/orders', async (req, res) => {
       error: 'En eller flera produkter finns inte',
     });
   }
+
+  // Beräknar orderns totalpris med priser från DB
+  let totalPrice = 0;
+
+  for (const item of orderData.items) {
+    const product = products.find(
+      (product) => product.id === item.productId
+    );
+    if (product) {
+      totalPrice = totalPrice + product.price * item.quantity;
+    }
+  }
+
   const orderNumber = createOrderNumber();
 
   return res.status(200).json({
     message: 'Orderdata mottagen',
     orderNumber: orderNumber,
+    totalPrice: totalPrice,
     order: orderData,
   })
 
