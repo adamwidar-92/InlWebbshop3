@@ -52,6 +52,20 @@ app.post('/api/orders', (req, res) => {
     });
   }
 
+  // Kontrollerar att varje orderrad har giltig produkt-id och antal
+  const hasInvalidItem = orderData.items.some(
+    (item) =>
+      !Number.isInteger(item.productId) ||
+      item.productId <= 0 ||
+      !Number.isInteger(item.quantity) ||
+      item.quantity <= 0
+  );
+  if (hasInvalidItem) {
+    return res.status(400).json({
+      error: 'Varje produkt måste ha ett giltigt produkt-id och antal',
+    });
+  }
+
   return res.status(200).json({
     message: 'Orderdata mottagen',
     order: orderData,
