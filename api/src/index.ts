@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
+import 'dotenv/config';
 import express from 'express';
 import { randomUUID } from 'node:crypto';
 
@@ -83,6 +84,7 @@ app.post('/api/orders', async (req, res) => {
       },
     },
   });
+
   const hasMissingProduct = orderData.items.some(
     (item) => !products.some((product) => product.id === item.productId)
   );
@@ -104,17 +106,49 @@ app.post('/api/orders', async (req, res) => {
     }
   }
 
+  // Förbereder orderraderna som sparas i DB
+  const itemsToCreate = orderData.items.map((item) => {
+    const product = products.find(
+      (product) => product.id === item.productId
+    );
+
+    if (!product) {
+      throw new Error("Produkten kunde inte hittas");
+    }
+
+    return {
+      quantity: item.quantity,
+      price: product.price,
+      productId: item.productId,
+    };
+  });
+
   const orderNumber = createOrderNumber();
 
-  return res.status(200).json({
-    message: 'Orderdata mottagen',
-    orderNumber: orderNumber,
-    totalPrice: totalPrice,
-    order: orderData,
-  })
+  // Sparar ordern och orderraderna i DB
+  const createdOrder = await prisma.order.create({
+    data: {
+      orderNumber: orderNumber,
+      customerName: orderData.customerName,
+      email: orderData.email,
+      phone: orderData.phone,
+      address: orderData.address,
+      totalPrice: totalPrice,
+      items: {
+        create: itemsToCreate,
+      },
+    },
+  });
+
+  // 201 betyder att ordern är skapad
+  return res.status(201).json({
+    message: 'Order skapad',
+    orderNumber: createdOrder.orderNumber,
+    totalPrice: createdOrder.totalPrice,
+  });
 
 })
 
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
-})
+});
