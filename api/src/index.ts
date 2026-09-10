@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import express from 'express';
 import { randomUUID } from 'node:crypto';
@@ -23,6 +24,8 @@ function createOrderNumber(): string {
 }
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Skapar anslutningen till DB
+const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
@@ -32,7 +35,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   const orderData = req.body as CreateOrderRequest
 
   const deliveryFields = [
@@ -68,6 +71,24 @@ app.post('/api/orders', (req, res) => {
   if (hasInvalidItem) {
     return res.status(400).json({
       error: 'Varje produkt måste ha ett giltigt produkt-id och antal',
+    });
+  }
+  // Hämtar alla produkt idn som kunden vill beställa
+  const productIds = orderData.items.map((item) => item.productId)
+  // Hämtar samma produkter från DB
+  const products = await prisma.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+  });
+  const hasMissingProduct = orderData.items.some(
+    (item) => !products.some((product) => product.id === item.productId)
+  );
+  if (hasMissingProduct) {
+    return res.status(400).json({
+      error: 'En eller flera produkter finns inte',
     });
   }
   const orderNumber = createOrderNumber();
