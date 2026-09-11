@@ -1,11 +1,11 @@
 import {
-    Box,
-    Button,
-    CardMedia,
-    CircularProgress,
-    Container,
-    Grid,
-    Typography,
+  Box,
+  Button,
+  CardMedia,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -18,7 +18,7 @@ export default function ProductPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error('Produkten hittades inte')
         return res.json()

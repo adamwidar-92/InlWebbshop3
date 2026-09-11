@@ -9,7 +9,7 @@ export default function HomePage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/products')
+    fetch('/api/products')
       .then((res) => {
         if (!res.ok) throw new Error('Kunde inte hämta produkter')
         return res.json()
