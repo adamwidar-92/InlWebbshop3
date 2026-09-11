@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
 
-const router = Router()
+const productsRouter = Router()
 const prisma = new PrismaClient()
 
 
 // GET /api/products -  Hämta alla produkter
 
-router.get('/', async (req, res) => {
+productsRouter.get('/', async (req, res) => {
   try {
     const products = await prisma.product.findMany({
       orderBy: { id: 'asc' }
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 // GET /api/products/:id - Hämta en produkt
 
-router.get('/:id', async (req, res) => {
+productsRouter.get('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
 
@@ -44,7 +44,7 @@ router.get('/:id', async (req, res) => {
 
 // POST /api/products - Skapa ny produkt
 
-router.post('/', async (req, res) => {
+productsRouter.post('/', async (req, res) => {
   try {
     const { name, description, price, image, category } = req.body
 
@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
 
 // PUT /api/products/:id - Uppdatera produkt
 
-router.put('/:id', async (req, res) => {
+productsRouter.put('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
     const { name, description, price, image, category } = req.body
@@ -104,7 +104,7 @@ router.put('/:id', async (req, res) => {
 
 // DELETE /api/products/:id - Ta bort produkt
 
-router.delete('/:id', async (req, res) => {
+productsRouter.delete('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
 
@@ -124,4 +124,4 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-export default router
+export default productsRouter

@@ -1,9 +1,9 @@
-<<<<<<< HEAD
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import { randomUUID } from 'node:crypto';
+import productsRouter from './routes/products.js';
 
 
 // Beskriver en produkt som skickas från kundvagnen
@@ -28,14 +28,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Skapar anslutningen till DB
 const prisma = new PrismaClient();
-=======
-import cors from 'cors'
-import express from 'express'
-import productsRouter from './routes/products.js'
-
-const app = express()
-const PORT = 3001
->>>>>>> feature/products-seed
 
 app.use(cors())
 app.use(express.json())
@@ -161,10 +153,5 @@ app.post('/api/orders', async (req, res) => {
 })
 
 app.listen(PORT, () => {
-<<<<<<< HEAD
-  console.log(`API running on port ${PORT}`);
-});
-=======
   console.log(`Server körs på http://localhost:${PORT}`)
 })
->>>>>>> feature/products-seed

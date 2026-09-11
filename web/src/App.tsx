@@ -1,20 +1,13 @@
 import { Box } from '@mui/material'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-<<<<<<< HEAD
 import Footer from './components/Footer'
-=======
->>>>>>> feature/products-seed
 import Header from './components/Header'
 import Admin from './pages/Admin'
 import Checkout from './pages/Checkout'
 import Confirmation from './pages/Confirmation'
-<<<<<<< HEAD
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-=======
 import HomePage from './pages/HomePage'
+import NotFound from './pages/NotFound'
 import ProductPage from './pages/ProductPage'
->>>>>>> feature/products-seed
 import Products from './pages/Products'
 
 export default function App() {

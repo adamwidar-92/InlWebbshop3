@@ -1,31 +1,14 @@
-<<<<<<< HEAD
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-=======
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography
-} from '@mui/material'
-import { Link } from 'react-router-dom'
->>>>>>> feature/products-seed
 import type { Product } from '../types/Product'
 
 interface Props {
   product: Product
 }
-<<<<<<< HEAD
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }: Props) {
   const { addToCart } = useCart()
 
-=======
-
-export default function ProductCard({ product }: Props) {
->>>>>>> feature/products-seed
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardMedia
@@ -56,11 +39,7 @@ export default function ProductCard({ product }: Props) {
         >
           Visa mer
         </Button>
-<<<<<<< HEAD
         <Button onClick={() => addToCart(product)} size="small" variant="contained" color="primary">
-=======
-        <Button size="small" variant="contained">
->>>>>>> feature/products-seed
           Lägg i kundvagn
         </Button>
       </CardActions>
