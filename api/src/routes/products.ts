@@ -1,15 +1,14 @@
-import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
+import { db } from '../db.js'
 
 const productsRouter = Router()
-const prisma = new PrismaClient()
 
 
 // GET /api/products -  Hämta alla produkter
 
 productsRouter.get('/', async (req, res) => {
   try {
-    const products = await prisma.product.findMany({
+    const products = await db.product.findMany({
       orderBy: { id: 'asc' }
     })
     res.json(products)
@@ -26,7 +25,7 @@ productsRouter.get('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
 
-    const product = await prisma.product.findUnique({
+    const product = await db.product.findUnique({
       where: { id }
     })
 
@@ -53,7 +52,7 @@ productsRouter.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Alla fält utom category är obligatoriska' })
     }
 
-    const product = await prisma.product.create({
+    const product = await db.product.create({
       data: {
         name,
         description,
@@ -78,12 +77,12 @@ productsRouter.put('/:id', async (req, res) => {
     const id = Number(req.params.id)
     const { name, description, price, image, category } = req.body
 
-    const existing = await prisma.product.findUnique({ where: { id } })
+    const existing = await db.product.findUnique({ where: { id } })
     if (!existing) {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
-    const product = await prisma.product.update({
+    const product = await db.product.update({
       where: { id },
       data: {
         name,
@@ -108,12 +107,12 @@ productsRouter.delete('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
 
-    const existing = await prisma.product.findUnique({ where: { id } })
+    const existing = await db.product.findUnique({ where: { id } })
     if (!existing) {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
-    await prisma.product.delete({
+    await db.product.delete({
       where: { id }
     })
 

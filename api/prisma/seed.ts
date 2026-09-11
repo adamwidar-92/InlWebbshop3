@@ -1,15 +1,14 @@
-import { PrismaClient } from '@prisma/client'
+import { db } from "../src/db.js"
 
-const prisma = new PrismaClient()
 
 async function main() {
   // Rensa gamla data (valfritt men bra)
-  await prisma.orderItem.deleteMany()
-  await prisma.order.deleteMany()
-  await prisma.product.deleteMany()
+  await db.orderItem.deleteMany()
+  await db.order.deleteMany()
+  await db.product.deleteMany()
 
   // Lägg in produkterna
-  await prisma.product.createMany({
+  await db.product.createMany({
     data: [
       {
         name: "Göteborgs Rapé Vit Portion",
@@ -65,5 +64,5 @@ main()
     process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect()
+    await db.$disconnect()
   })

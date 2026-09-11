@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import { randomUUID } from 'node:crypto';
+import { db } from './db.js';
 import productsRouter from './routes/products.js';
 
 
@@ -27,7 +27,6 @@ function createOrderNumber(): string {
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Skapar anslutningen till DB
-const prisma = new PrismaClient();
 
 app.use(cors())
 app.use(express.json())
@@ -80,7 +79,7 @@ app.post('/api/orders', async (req, res) => {
   // Hämtar alla produkt idn som kunden vill beställa
   const productIds = orderData.items.map((item) => item.productId)
   // Hämtar samma produkter från DB
-  const products = await prisma.product.findMany({
+  const products = await db.product.findMany({
     where: {
       id: {
         in: productIds,
@@ -129,7 +128,7 @@ app.post('/api/orders', async (req, res) => {
   const orderNumber = createOrderNumber();
 
   // Sparar ordern och orderraderna i DB
-  const createdOrder = await prisma.order.create({
+  const createdOrder = await db.order.create({
     data: {
       orderNumber: orderNumber,
       customerName: orderData.customerName,
