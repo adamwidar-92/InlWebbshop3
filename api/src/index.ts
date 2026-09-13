@@ -151,6 +151,31 @@ app.post('/api/orders', async (req, res) => {
 
 })
 
+app.get('/api/orders/:orderNumber', async (req, res) => {
+  const orderNumber = req.params.orderNumber;
+
+  const order = await db.order.findUnique({
+    where: {
+      orderNumber: orderNumber,
+    },
+    include: {
+      items: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+
+  if (!order) {
+    return res.status(404).json({
+      error: 'Ordern kunde inte hittas',
+    });
+  }
+
+  return res.status(200).json(order);
+});
+
 app.listen(PORT, () => {
   console.log(`Server körs på http://localhost:${PORT}`)
 })
