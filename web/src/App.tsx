@@ -7,6 +7,7 @@ import Checkout from './pages/Checkout'
 import Confirmation from './pages/Confirmation'
 import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
+import ProductFormPage from './pages/ProductFormPage'
 import ProductPage from './pages/ProductPage'
 import Products from './pages/Products'
 
@@ -23,6 +24,8 @@ export default function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation/:orderNumber" element={<Confirmation />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/products/new" element={<ProductFormPage />} />
+            <Route path="/admin/products/edit/:id" element={<ProductFormPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>
