@@ -1,3 +1,4 @@
+import { Snackbar } from '@mui/material'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { CartItem } from '../types/CartItem'
@@ -19,6 +20,7 @@ type CartProviderProps = {
 }
 
 export function CartProvider({ children }: CartProviderProps) {
+  const [showMsg, setShowMsg] = useState(false)
   const [items, setItems] = useState<CartItem[]>(() => {
     const savedCart = localStorage.getItem('cart')
 
@@ -61,6 +63,7 @@ export function CartProvider({ children }: CartProviderProps) {
         },
       ]
     })
+    setShowMsg(true)
   }
 
   function removeFromCart(productId: number) {
@@ -90,6 +93,7 @@ export function CartProvider({ children }: CartProviderProps) {
   return (
     <CartContext.Provider value={{ items, addToCart, totalQuantity, removeFromCart, updateQuantity }}>
       {children}
+      <Snackbar open ={showMsg} message="Produkten har lagts till i kundvagnen" autoHideDuration={3000} onClose={() => setShowMsg(false)}/>
     </CartContext.Provider>
   )
 }

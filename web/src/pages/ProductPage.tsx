@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 import type { Product } from '../types/Product'
 
 export default function ProductPage() {
@@ -16,6 +17,7 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const { addToCart } = useCart() 
 
   useEffect(() => {
     fetch(`/api/products/${id}`)
@@ -94,7 +96,7 @@ export default function ProductPage() {
             {product.description}
           </Typography>
 
-          <Button variant="contained" size="large">
+          <Button onClick={() => addToCart(product)} variant="contained" size="large">
             Lägg i kundvagn
           </Button>
         </Grid>
