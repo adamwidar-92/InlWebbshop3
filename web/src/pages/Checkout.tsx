@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { Box, Button, Container, IconButton, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Container, IconButton, TextField, Typography } from '@mui/material'
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ export default function Checkout() {
 
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [idempotencyKey] = useState(() => {
     const savedKey = sessionStorage.getItem('checkoutKey')
 
@@ -22,6 +23,7 @@ export default function Checkout() {
     sessionStorage.setItem('checkoutKey', newKey)
     return newKey
   })
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (isSubmitting || items.length === 0) {
@@ -43,7 +45,10 @@ export default function Checkout() {
 
       })),
     }
+
+    setErrorMessage('')
     setIsSubmitting(true)
+
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -63,7 +68,7 @@ export default function Checkout() {
         replace: true,
       })
     } catch {
-      alert('Beställningen misslyckades. Försök igen.')
+      setErrorMessage('Beställningen misslyckades. Försök igen.')
     } finally {
       setIsSubmitting(false)
     }
@@ -183,6 +188,11 @@ export default function Checkout() {
             },
           }}
         />
+        {errorMessage && (
+          <Alert severity="error">
+            {errorMessage}
+          </Alert>
+        )}
 
 
         <Button type="submit"
