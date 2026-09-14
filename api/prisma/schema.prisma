@@ -23,15 +23,16 @@ model Product {
 }
 
 model Order {
-  id           Int         @id @default(autoincrement())
-  orderNumber  String      @unique
-  customerName String
-  email        String
-  phone        String
-  address      String
-  totalPrice   Float
-  createdAt    DateTime    @default(now())
-  items        OrderItem[]
+  id             Int         @id @default(autoincrement())
+  orderNumber    String      @unique
+  idempotencyKey String?     @unique
+  customerName   String
+  email          String
+  phone          String
+  address        String
+  totalPrice     Float
+  createdAt      DateTime    @default(now())
+  items          OrderItem[]
 }
 
 model OrderItem {
