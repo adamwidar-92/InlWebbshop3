@@ -10,6 +10,7 @@ interface CartContextValue {
   totalQuantity: number
   removeFromCart: (productId: number) => void
   updateQuantity: (productId: number, newQuantity: number) => void
+  clearCart: () => void
 
 }
 
@@ -30,10 +31,10 @@ export function CartProvider({ children }: CartProviderProps) {
       return []
     }
   })
-    
-    useEffect(() => {
-      localStorage.setItem('cart', JSON.stringify(items))
-    }, [items])
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items))
+  }, [items])
 
 
   function addToCart(product: Product) {
@@ -72,12 +73,16 @@ export function CartProvider({ children }: CartProviderProps) {
     )
   }
 
+  function clearCart() {
+    setItems([])
+  }
+
   function updateQuantity(productId: number, newQuantity: number) {
     if (newQuantity < 1) {
       return undefined
     }
 
-    setItems((currentItems) => 
+    setItems((currentItems) =>
       currentItems.map((item) =>
         item.id === productId ? { ...item, quantity: newQuantity } : item,
       )
@@ -91,9 +96,24 @@ export function CartProvider({ children }: CartProviderProps) {
   }
 
   return (
-    <CartContext.Provider value={{ items, addToCart, totalQuantity, removeFromCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        totalQuantity,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+      }}
+    >
       {children}
-      <Snackbar open ={showMsg} message="Produkten har lagts till i kundvagnen" autoHideDuration={3000} onClose={() => setShowMsg(false)}/>
+
+      <Snackbar
+        open={showMsg}
+        message="Produkten har lagts till i kundvagnen"
+        autoHideDuration={3000}
+        onClose={() => setShowMsg(false)}
+      />
     </CartContext.Provider>
   )
 }
