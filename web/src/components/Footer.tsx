@@ -1,3 +1,6 @@
+import EmailIcon from '@mui/icons-material/Email'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import PhoneIcon from '@mui/icons-material/Phone'
 import { Box, Container, Grid, Link, Stack, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -32,6 +35,31 @@ export default function Footer() {
                             <Link component={RouterLink} to="/admin" underline="hover" color="inherit" sx={{ opacity: 0.9 }}>
                                 Adminpanel
                             </Link>
+                        </Stack>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }} gutterBottom>
+                            Kontakt
+                        </Typography>
+                        <Stack spacing={1.5}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.9 }}>
+                                <LocationOnIcon fontSize="small" />
+                                <Typography variant="body2">
+                                    YRKESHÖGSKOLAN BORÅS SWEDEN
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.9 }}>
+                                <PhoneIcon fontSize="small" />
+                                <Link href="tel:0812345678" underline="hover" color="inherit" variant="body2">
+                                    08-123 456 78
+                                </Link>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.9 }}>
+                                <EmailIcon fontSize="small" />
+                                <Link href="mailto:kontakt@prilloteket.se" underline="hover" color="inherit" variant="body2" sx={{ overflowWrap: 'anywhere', minWidth: 0 }}>
+                                    kontakt@prilloteket.se
+                                </Link>
+                            </Box>
                         </Stack>
                     </Grid>
                 </Grid>
