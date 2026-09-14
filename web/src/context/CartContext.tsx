@@ -36,6 +36,36 @@ export function CartProvider({ children }: CartProviderProps) {
         return []
       }
 
+      const validItems = parsedCart.every((item) => {
+        if (item === null || typeof item !== 'object') {
+          return false
+        }
+
+        const validId = Number.isInteger(item.id) && item.id > 0
+
+        const validText =
+          typeof item.name === 'string' &&
+          typeof item.description === 'string' &&
+          typeof item.image === 'string'
+
+        const validPrice =
+          typeof item.price === 'number' &&
+          Number.isFinite(item.price) &&
+          item.price >= 0
+
+        const validQuantity =
+          Number.isInteger(item.quantity) && item.quantity > 0
+
+        const validCategory =
+          item.category == null || typeof item.category === 'string'
+
+        return validId && validText && validPrice && validQuantity && validCategory
+      })
+
+      if (!validItems) {
+        return []
+      }
+
       return parsedCart as CartItem[]
     } catch {
       return []
