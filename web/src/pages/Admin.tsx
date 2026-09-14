@@ -24,7 +24,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true)
 
   const fetchProducts = () => {
-    fetch('http://localhost:3000/api/products')
+    fetch('/api/products')
       .then((res) => res.json())
       .then((data) => {
         setProducts(data)
@@ -40,7 +40,7 @@ export default function Admin() {
   const handleDelete = async (id: number) => {
     if (!confirm('Vill du verkligen ta bort produkten?')) return
 
-    await fetch(`http://localhost:3000/api/products/${id}`, {
+    await fetch(`/api/products/${id}`, {
       method: 'DELETE',
     })
 
