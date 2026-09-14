@@ -29,7 +29,7 @@ export default function ProductFormPage() {
   useEffect(() => {
     if (!isEdit) return
 
-    fetch(`http://localhost:3000/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setForm({
@@ -81,8 +81,8 @@ export default function ProductFormPage() {
     }
 
     const url = isEdit
-      ? `http://localhost:3000/api/products/${id}`
-      : 'http://localhost:3000/api/products'
+      ? `/api/products/${id}`
+      : '/api/products'
 
     const method = isEdit ? 'PUT' : 'POST'
 

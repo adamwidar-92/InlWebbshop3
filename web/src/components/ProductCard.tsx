@@ -1,48 +1,65 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
-import type { Product } from '../types/Product'
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import type { Product } from "../types/Product";
 
 interface Props {
-  product: Product
+  product: Product;
 }
 export default function ProductCard({ product }: Props) {
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardMedia
         component="img"
-        height="220"
         image={product.image}
         alt={product.name}
-        sx={{ objectFit: 'cover' }}
+        sx={{
+          height: 220,
+          objectFit: "contain", // visar hela dosan
+          backgroundColor: "#f5f5f5",
+          p: 1,
+        }}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography
+          variant="h6"
+          component="h2"
+          gutterBottom
+          color="text.primary"
+        >
           {product.name}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.description.length > 90
-            ? product.description.slice(0, 90) + '...'
+            ? product.description.slice(0, 90) + "..."
             : product.description}
         </Typography>
-        <Typography variant="h6" color="primary">
-          {product.price.toLocaleString('sv-SE')} kr
+        <Typography variant="h6" color="primary.main">
+          {product.price.toLocaleString("sv-SE")} kr
         </Typography>
       </CardContent>
       <CardActions>
-        <Button
-          size="small"
-          component={Link}
-          to={`/product/${product.id}`}
-        >
+        <Button size="small" component={Link} to={`/product/${product.id}`}>
           Visa mer
         </Button>
-        <Button onClick={() => addToCart(product)} size="small" variant="contained" color="primary">
+        <Button
+          onClick={() => addToCart(product)}
+          size="small"
+          variant="contained"
+          color="primary"
+        >
           Lägg i kundvagn
         </Button>
       </CardActions>
     </Card>
-  )
+  );
 }
