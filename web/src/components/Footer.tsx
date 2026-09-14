@@ -45,7 +45,7 @@ export default function Footer() {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.9 }}>
                                 <LocationOnIcon fontSize="small" />
                                 <Typography variant="body2">
-                                    YRKESHÖGSKOLAN BORÅS SWEDEN
+                                    YRKESHÖGSKOLAN BORÅS SVERIGE
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.9 }}>
@@ -63,9 +63,11 @@ export default function Footer() {
                         </Stack>
                     </Grid>
                 </Grid>
-                <Typography variant="body2" align="center">
-                    2026 Prilloteket
-                </Typography>
+                <Box sx={{ borderTop: '1px solid rgba(255, 255, 255, 0.2)', mt: 4, pt: 2, textAlign: 'center' }}>
+                    <Typography variant="body2" sx={{ opacity: 0.7 }}>
+                        © 2026 Prilloteket
+                    </Typography>
+                </Box>
             </Container>
             </Box>
     )
