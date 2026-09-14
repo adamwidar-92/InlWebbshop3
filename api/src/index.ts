@@ -14,6 +14,7 @@ interface CreateOrderItemRequest {
 
 // Beskriver info som frontend skickar när en order skapas
 interface CreateOrderRequest {
+  idempotencyKey: string;
   customerName: string;
   email: string;
   phone: string;
@@ -40,6 +41,29 @@ app.get('/', (req, res) => {
 
 app.post('/api/orders', async (req, res) => {
   const orderData = req.body as CreateOrderRequest
+
+  if (
+    typeof orderData.idempotencyKey !== 'string' ||
+    orderData.idempotencyKey.trim() === ''
+  ) {
+    return res.status(400).json({
+      error: 'Beställningen saknar en giltig nyckel',
+    })
+  }
+
+  const existingOrder = await db.order.findUnique({
+    where: {
+      idempotencyKey: orderData.idempotencyKey,
+    },
+  });
+
+  if (existingOrder) {
+    return res.status(200).json({
+      message: 'Ordern finns redan',
+      orderNumber: existingOrder.orderNumber,
+      totalPrice: existingOrder.totalPrice,
+    });
+  }
 
   const deliveryFields = [
     orderData.customerName,
@@ -127,29 +151,56 @@ app.post('/api/orders', async (req, res) => {
 
   const orderNumber = createOrderNumber();
 
-  // Sparar ordern och orderraderna i DB
-  const createdOrder = await db.order.create({
-    data: {
-      orderNumber: orderNumber,
-      customerName: orderData.customerName,
-      email: orderData.email,
-      phone: orderData.phone,
-      address: orderData.address,
-      totalPrice: totalPrice,
-      items: {
-        create: itemsToCreate,
+  try {
+    const createdOrder = await db.order.create({
+      data: {
+        orderNumber: orderNumber,
+        idempotencyKey: orderData.idempotencyKey,
+        customerName: orderData.customerName,
+        email: orderData.email,
+        phone: orderData.phone,
+        address: orderData.address,
+        totalPrice: totalPrice,
+        items: {
+          create: itemsToCreate,
+        },
       },
-    },
-  });
+    });
 
-  // 201 betyder att ordern är skapad
-  return res.status(201).json({
-    message: 'Order skapad',
-    orderNumber: createdOrder.orderNumber,
-    totalPrice: createdOrder.totalPrice,
-  });
+    return res.status(201).json({
+      message: 'Order skapad',
+      orderNumber: createdOrder.orderNumber,
+      totalPrice: createdOrder.totalPrice,
+    });
+  } catch (error) {
+    try {
+      // Ett samtidigt anrop kan redan ha sparat ordern
+      const savedOrder = await db.order.findUnique({
+        where: {
+          idempotencyKey: orderData.idempotencyKey,
+        },
+      });
 
-})
+      if (savedOrder) {
+        return res.status(200).json({
+          message: 'Ordern finns redan',
+          orderNumber: savedOrder.orderNumber,
+          totalPrice: savedOrder.totalPrice,
+        });
+      }
+    } catch (lookupError) {
+      console.error('Kunde inte kontrollera ordern:', lookupError);
+    }
+
+    console.error('Kunde inte spara ordern:', error);
+
+    return res.status(500).json({
+      error: 'Beställningen kunde inte sparas',
+    });
+  }
+});
+
+
 
 app.get('/api/orders/:orderNumber', async (req, res) => {
   const orderNumber = req.params.orderNumber;
