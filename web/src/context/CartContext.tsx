@@ -23,11 +23,21 @@ type CartProviderProps = {
 export function CartProvider({ children }: CartProviderProps) {
   const [showMsg, setShowMsg] = useState(false)
   const [items, setItems] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem('cart')
+    try {
+      const savedCart = localStorage.getItem('cart')
 
-    if (savedCart) {
-      return JSON.parse(savedCart) as CartItem[]
-    } else {
+      if (!savedCart) {
+        return []
+      }
+
+      const parsedCart = JSON.parse(savedCart)
+
+      if (!Array.isArray(parsedCart)) {
+        return []
+      }
+
+      return parsedCart as CartItem[]
+    } catch {
       return []
     }
   })
