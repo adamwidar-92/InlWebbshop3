@@ -6,22 +6,42 @@ import type { Order } from '../types/Order'
 export default function Confirmation() {
   const { orderNumber } = useParams()
   const [order, setOrder] = useState<Order | null>(null)
+  const [error, setError] = useState('')
+
   useEffect(() => {
     async function fetchOrder() {
       if (!orderNumber) {
+        setError('Ordernummer saknas')
         return
       }
-      const response = await fetch(
-        `/api/orders/${orderNumber}`,
-      )
-      const data = (await response.json()) as Order
-      setOrder(data)
+
+      try {
+        const response = await fetch(`/api/orders/${orderNumber}`)
+
+        if (!response.ok) {
+          throw new Error('Ordern kunde inte hittas')
+        }
+
+        const data = (await response.json()) as Order
+        setOrder(data)
+      } catch {
+        setError('Ordern kunde inte hittas')
+      }
     }
-
     fetchOrder()
-
   }, [orderNumber])
 
+  if (error) {
+    return (
+      <Container sx={{ py: 8 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Något gick fel
+        </Typography>
+
+        <Typography color="error">{error}</Typography>
+      </Container>
+    )
+  }
 
   if (!order) {
     return (
