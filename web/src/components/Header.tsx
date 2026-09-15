@@ -1,25 +1,28 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AppBar from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import LogoImage from "../assets/bilder/LogoPrilloteket.png";
+import { useCart } from "../context/CartContext";
 
-const pages = ['Admin'];
+const pages = ["Admin"];
 
 function Header() {
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const { totalQuantity } = useCart()
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const { totalQuantity } = useCart();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -32,13 +35,13 @@ function Header() {
   const handleNavClick = (page: string) => {
     handleCloseNavMenu();
     const routes: Record<string, string> = {
-      'Admin': '/admin',
+      Admin: "/admin",
     };
     navigate(routes[page]);
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "#64705c" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -47,19 +50,17 @@ function Header() {
             component="div"
             sx={{
               mr: 2,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+              cursor: "pointer",
             }}
-            onClick={() => navigate('/')}
-          >
-            LOGO
-          </Typography>
+            onClick={() => navigate("/")}
+          ></Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-controls="menu-appbar"
@@ -73,41 +74,83 @@ function Header() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={() => handleNavClick(page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
+          {/* DESKTOP LOGOTYP */}
+          <Box
+            component="div"
+            onClick={() => navigate("/")}
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              cursor: "pointer",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={LogoImage}
+              alt="Prilloteket Logotyp"
+              style={{ height: "120px", width: "auto" }}
+            />
+          </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+          {/* MOBILE LOGOTYP */}
+          <Box
+            component="div"
+            onClick={() => navigate("/")}
+            sx={{
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <img
+              src={LogoImage}
+              alt="Prilloteket Logotyp"
+              style={{ height: "100px", width: "auto" }}
+            />
+          </Box>
+          <Box
+            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: 2 }}
+          >
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => handleNavClick(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
             ))}
           </Box>
 
-          <IconButton onClick={() => navigate('/checkout')} color="inherit" sx={{ ml: 'auto' }} aria-label="Gå till kundvagnen">
+          <IconButton
+            onClick={() => navigate("/checkout")}
+            color="inherit"
+            sx={{ ml: "auto" }}
+            aria-label="Gå till kundvagnen"
+          >
             <Badge badgeContent={totalQuantity} color="error">
-            <ShoppingCartIcon />
+              <ShoppingCartIcon />
             </Badge>
           </IconButton>
         </Toolbar>
@@ -117,4 +160,3 @@ function Header() {
 }
 
 export default Header;
-

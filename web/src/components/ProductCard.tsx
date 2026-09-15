@@ -23,39 +23,47 @@ export default function ProductCard({ product }: Props) {
         image={product.image}
         alt={product.name}
         sx={{
-          height: 220,
-          objectFit: "contain", // visar hela dosan
+          height: 320,
+          objectFit: "contain",
           backgroundColor: "#f5f5f5",
-          p: 1,
+          p: 2,
         }}
       />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography
-          variant="h6"
+          variant="h5"
           component="h2"
           gutterBottom
           color="text.primary"
         >
           {product.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           {product.description.length > 90
             ? product.description.slice(0, 90) + "..."
             : product.description}
         </Typography>
-        <Typography variant="h6" color="primary.main">
+
+        <Typography variant="h5" color="primary.main">
           {product.price.toLocaleString("sv-SE")} kr
         </Typography>
+
       </CardContent>
-      <CardActions>
-        <Button size="small" component={Link} to={`/product/${product.id}`}>
+      <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
+        <Button
+          size="small"
+          variant="outlined"
+          component={Link}
+          to={`/product/${product.id}`}
+          fullWidth
+        >
           Visa mer
         </Button>
         <Button
-          onClick={() => addToCart(product)}
           size="small"
           variant="contained"
-          color="primary"
+          onClick={() => addToCart(product)}
+          fullWidth
         >
           Lägg i kundvagn
         </Button>
