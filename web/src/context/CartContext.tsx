@@ -11,6 +11,7 @@ interface CartContextValue {
   removeFromCart: (productId: number) => void
   updateQuantity: (productId: number, newQuantity: number) => void
   clearCart: () => void
+  updatePrices: (products: Product[]) => void
 
 }
 
@@ -117,6 +118,22 @@ export function CartProvider({ children }: CartProviderProps) {
     setItems([])
   }
 
+  function updatePrices(products: Product[]) {
+    setItems((currentItems) =>
+      currentItems.map((item) => {
+        const product = products.find((product) => product.id === item.id)
+
+        if (!product) {
+          return item
+        }
+
+        return {
+          ...item, price: product.price,
+        }
+      })
+    )
+  }
+
   function updateQuantity(productId: number, newQuantity: number) {
     if (newQuantity < 1) {
       return undefined
@@ -144,6 +161,7 @@ export function CartProvider({ children }: CartProviderProps) {
         removeFromCart,
         updateQuantity,
         clearCart,
+        updatePrices
       }}
     >
       {children}
