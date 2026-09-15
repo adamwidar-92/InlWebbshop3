@@ -5,9 +5,11 @@ import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import type { Product } from '../types/Product'
+
 
 export default function Checkout() {
-  const { items, removeFromCart, updateQuantity, clearCart } = useCart()
+  const { items, removeFromCart, updateQuantity, clearCart, updatePrices } = useCart()
 
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,8 +43,7 @@ export default function Checkout() {
       items: items.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
-
-
+        price: item.price
       })),
     }
 
@@ -50,6 +51,35 @@ export default function Checkout() {
     setIsSubmitting(true)
 
     try {
+      const productsResponse = await fetch('/api/products')
+
+      if (!productsResponse.ok) {
+        setErrorMessage('Priserna kunde inte hämtas. Försök igen.')
+        return
+      }
+
+      const products: Product[] = await productsResponse.json()
+      let pricesChanged = false
+
+      for (const item of items) {
+        const product = products.find((product) => product.id === item.id)
+
+        if (!product) {
+          setErrorMessage(`${item.name} finns inte längre. Ta bort den från kundvagnen.`)
+          return
+        }
+
+        if (product.price !== item.price) {
+          pricesChanged = true
+        }
+      }
+
+      if (pricesChanged) {
+        updatePrices(products)
+        setErrorMessage('Priserna har ändrats. Kontrollera totalsumman och klicka igen för att beställa.')
+        return
+      }
+
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
@@ -58,7 +88,9 @@ export default function Checkout() {
         body: JSON.stringify(orderData),
       })
       if (!response.ok) {
-        throw new Error('Beställningen kunde inte genomföras')
+        const errorData = await response.json()
+        setErrorMessage(errorData.error || 'Beställningen kunde inte genomföras')
+        return
       }
       const createdOrder = await response.json()
       clearCart()
