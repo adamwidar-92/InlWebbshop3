@@ -129,7 +129,9 @@ export default function Checkout() {
 
         {items.length > 0 && (
           <Typography variant="h6" sx={{ textAlign: 'right', mt: 2, fontWeight: 'bold' }}>
-            Totalt: {totalPrice} kr
+            Totalt: {totalPrice.toLocaleString('sv-SE', {
+              maximumFractionDigits: 3
+            })} kr
           </Typography>
         )}
 
