@@ -10,6 +10,7 @@ import productsRouter from './routes/products.js';
 interface CreateOrderItemRequest {
   productId: number;
   quantity: number;
+  price: number;
 }
 
 // Beskriver info som frontend skickar när en order skapas
@@ -87,17 +88,19 @@ app.post('/api/orders', async (req, res) => {
     });
   }
 
-  // Kontrollerar att varje orderrad har giltig produkt-id och antal
   const hasInvalidItem = orderData.items.some(
     (item) =>
+      item == null ||
       !Number.isInteger(item.productId) ||
       item.productId <= 0 ||
       !Number.isInteger(item.quantity) ||
-      item.quantity <= 0
+      item.quantity <= 0 ||
+      !Number.isFinite(item.price) ||
+      item.price < 0
   );
   if (hasInvalidItem) {
     return res.status(400).json({
-      error: 'Varje produkt måste ha ett giltigt produkt-id och antal',
+      error: 'Varje produkt måste ha ett giltigt produkt-id, antal och pris',
     });
   }
   // Hämtar alla produkt idn som kunden vill beställa
@@ -118,6 +121,16 @@ app.post('/api/orders', async (req, res) => {
     return res.status(400).json({
       error: 'En eller flera produkter finns inte',
     });
+  }
+
+  for (const item of orderData.items) {
+    const product = products.find((product) => product.id === item.productId);
+
+    if (product && product.price !== item.price) {
+      return res.status(400).json({
+        error: 'Priset har ändrats. Klicka på Slutför köp igen för att uppdatera kundvagnen och kontrollera totalsumman.',
+      });
+    }
   }
 
   // Beräknar orderns totalpris med priser från DB
