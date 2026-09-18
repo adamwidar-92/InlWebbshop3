@@ -3,6 +3,17 @@ import { db } from '../db.js'
 
 const productsRouter = Router()
 
+const isValidImagePath = (path: string): boolean => {
+  const trimmed = path.trim()
+  if (trimmed.startsWith('/assets/')) return true
+  try {
+    new URL(trimmed)
+    return true
+  } catch {
+    return false
+  }
+}
+
 
 // GET /api/products -  Hämta alla produkter
 
@@ -41,24 +52,39 @@ productsRouter.get('/:id', async (req, res) => {
 })
 
 
-// POST /api/products - Skapa ny produkt
+// POST /api/products - Skapa produkt
 
 productsRouter.post('/', async (req, res) => {
   try {
     const { name, description, price, image, category } = req.body
 
-    // Enkel validering
-    if (!name || !description || !price || !image) {
-      return res.status(400).json({ error: 'Alla fält utom category är obligatoriska' })
+    if (!name || typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 100) {
+      return res.status(400).json({ error: 'Namn är obligatoriskt och måste vara 2-100 tecken' })
+    }
+
+    if (!description || typeof description !== 'string' || description.trim().length < 10) {
+      return res.status(400).json({ error: 'Beskrivning är obligatorisk och måste vara minst 10 tecken' })
+    }
+
+    if (!price || isNaN(Number(price)) || Number(price) <= 0 || Number(price) > 100000) {
+      return res.status(400).json({ error: 'Pris är obligatoriskt, måste vara mellan 0 och 100 000' })
+    }
+
+    if (!image || typeof image !== 'string' || !isValidImagePath(image.trim())) {
+      return res.status(400).json({ error: 'Bild-väg är obligatorisk och måste vara en giltig väg eller URL' })
+    }
+
+    if (!category || typeof category !== 'string' || category.trim().length === 0) {
+      return res.status(400).json({ error: 'Kategori är obligatorisk' })
     }
 
     const product = await db.product.create({
       data: {
-        name,
-        description,
+        name: name.trim(),
+        description: description.trim(),
         price: Number(price),
-        image,
-        category: category || null
+        image: image.trim(),
+        category: category.trim()
       }
     })
 
@@ -82,14 +108,34 @@ productsRouter.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
+    if (!name || typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 100) {
+      return res.status(400).json({ error: 'Namn är obligatoriskt och måste vara 2-100 tecken' })
+    }
+
+    if (!description || typeof description !== 'string' || description.trim().length < 10) {
+      return res.status(400).json({ error: 'Beskrivning är obligatorisk och måste vara minst 10 tecken' })
+    }
+
+    if (!price || isNaN(Number(price)) || Number(price) <= 0 || Number(price) > 100000) {
+      return res.status(400).json({ error: 'Pris är obligatoriskt, måste vara mellan 0 och 100 000' })
+    }
+
+    if (!image || typeof image !== 'string' || !isValidImagePath(image.trim())) {
+      return res.status(400).json({ error: 'Bild-väg är obligatorisk och måste vara en giltig väg eller URL' })
+    }
+
+    if (!category || typeof category !== 'string' || category.trim().length === 0) {
+      return res.status(400).json({ error: 'Kategori är obligatorisk' })
+    }
+
     const product = await db.product.update({
       where: { id },
       data: {
-        name,
-        description,
+        name: name.trim(),
+        description: description.trim(),
         price: Number(price),
-        image,
-        category: category || null
+        image: image.trim(),
+        category: category.trim()
       }
     })
 
