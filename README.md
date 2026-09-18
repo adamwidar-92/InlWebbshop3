@@ -4,6 +4,12 @@ En webbshop byggd med React, TypeScript och MUI i frontend, samt Express, Prisma
 
 Projektet är en gruppuppgift där vi skapat en komplett webbshop med produktsidor, kundvagn, checkout och admin-hantering av produkter.
 
+## Gruppmedlemmar
+
+- Adam Widar
+- Marin P
+- George L
+
 ## Teknikstack
 
 ### Frontend (`web/`)
@@ -79,8 +85,8 @@ InlWebbshop3/
 
 ### Förutsättningar
 
-- Node.js
-- npm
+- Node.js (v16 eller högre)
+- npm eller yarn
 
 ### 1. Backend (API)
 
@@ -106,9 +112,117 @@ npm run dev
 
 Frontend körs på: `http://localhost:5173`
 
-### Proxy
+## Miljövariabler
 
-Frontend använder Vite-proxy så att anrop till `/api` skickas till backend.
+### Backend (`.env`)
+
+Skapa en `.env`-fil i `api/` mappen:
+
+```env
+DATABASE_URL="file:./dev.db"
+NODE_ENV="development"
+PORT=3000
+```
+
+- `DATABASE_URL` – Path till SQLite-databasen
+- `NODE_ENV` – `development` eller `production`
+- `PORT` – Vilken port API:et ska köra på (default: 3000)
+
+### Frontend
+
+Frontend använder `.env.local` för miljövariabler vid behov. Vite proxy är redan konfigurerad för API-anrop.
+
+## Build för Produktion
+
+### Frontend
+
+```bash
+cd web
+npm run build
+```
+
+Skapar en optimerad `dist/` mapp som kan deployas.
+
+### Backend
+
+```bash
+cd api
+npm run build  # Om tillgängligt
+npm start      # Startar i produktionsläge
+```
+
+## Databaskonfiguration
+
+### Prisma Schema
+
+Databasen hanteras via Prisma med SQLite. Migreringar finns i `api/prisma/migrations/`.
+
+#### Seed-data
+
+Seed-data körs automatiskt med `npx prisma db seed`. Det populerar databasen med exempel-produkter:
+- Göteborgs Rapé Vit Portion
+- Lundgrens Skåne
+- G.3 No.02 Slim White Extra Strong
+- VELO Guava Passionfruit
+- LEWA Power Liquorice & Raspberries
+
+#### För att återställa databasen
+
+```bash
+cd api
+npx prisma migrate reset  # Varning: Raderar all data!
+```
+
+## Testa API:et
+
+### Med curl
+
+```bash
+# Hämta alla produkter
+curl http://localhost:3000/api/products
+
+# Hämta en specifik produkt
+curl http://localhost:3000/api/products/1
+
+# Skapa en beställning (POST)
+curl -X POST http://localhost:3000/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com", ...}'
+```
+
+### Med Postman eller Thunder Client
+
+1. Importera API-endpoints från sektion **API-endpoints** nedan
+2. Testa POST/PUT/DELETE-operationer direkt i appen
+3. Verifiera responses innan du integrera i frontend
+
+
+### Backend-deployment
+
+- Kan deployas på servrar med Node.js stöd (Heroku, Render, DigitalOcean, AWS, Azure, etc.)
+- Kräver en produktions-databas (PostgreSQL, MySQL, el. hosting av SQLite)
+- Environment variables måste sättas på servrn
+
+### Frontend-deployment
+
+- Bygg med `npm run build`
+- Deployad som statiska filer (Vercel, Netlify, Firebase Hosting, etc.)
+- Måste peka på production-API:et
+
+
+### Prisma-migrering misslyckas
+
+```bash
+# Återställ databasen
+npx prisma migrate reset
+
+# Eller visa status
+npx prisma migrate status
+```
+
+### CORS-errors från API
+
+Verifiera att Vite-proxyn är konfigurerad i `vite.config.ts`. Bör automatiskt proxy `/api` till `http://localhost:3000`.
 
 ## API-endpoints
 

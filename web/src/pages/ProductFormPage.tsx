@@ -1,14 +1,14 @@
 import {
-    Box,
-    Button,
-    Container,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    TextField,
-    Typography,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -47,7 +47,7 @@ export default function ProductFormPage() {
       .catch((err) => console.error(err))
   }, [id, isEdit])
 
-  const categories = ['Vit Portion', 'Svart Portion', 'Slim Portion', 'Lös Snus', 'Övrig']
+   const categories = ['Vit Portion', 'Svart Portion', 'Slim Portion', 'Lös Snus', 'Övrig', 'White Portion', 'All White', 'Nikotinfritt']
 
   const isValidImagePath = (path: string): boolean => {
     const trimmed = path.trim()

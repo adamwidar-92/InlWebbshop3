@@ -31,6 +31,7 @@ const PORT = process.env.PORT || 3000;
 // Skapar anslutningen till DB
 
 app.use(cors())
+
 app.use(express.json())
 
 // Routes
@@ -105,12 +106,14 @@ app.post('/api/orders', async (req, res) => {
   }
   // Hämtar alla produkt idn som kunden vill beställa
   const productIds = orderData.items.map((item) => item.productId)
+
   // Hämtar samma produkter från DB
   const products = await db.product.findMany({
     where: {
       id: {
         in: productIds,
       },
+      isDeleted:false,
     },
   });
 

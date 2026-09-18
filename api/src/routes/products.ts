@@ -44,7 +44,7 @@ productsRouter.get('/:id', async (req, res) => {
       where: { id }
     })
 
-    if (!product) {
+    if (!product || product.isDeleted ) {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
@@ -108,7 +108,7 @@ productsRouter.put('/:id', async (req, res) => {
     const { name, description, price, image, category } = req.body
 
     const existing = await db.product.findUnique({ where: { id } })
-    if (!existing) {
+    if (!existing || existing.isDeleted) {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
