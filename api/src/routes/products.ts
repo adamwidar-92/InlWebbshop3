@@ -20,6 +20,7 @@ const isValidImagePath = (path: string): boolean => {
 productsRouter.get('/', async (req, res) => {
   try {
     const products = await db.product.findMany({
+      where: { isDeleted: false },
       orderBy: { id: 'asc' }
     })
     res.json(products)
@@ -147,7 +148,7 @@ productsRouter.put('/:id', async (req, res) => {
 })
 
 
-// DELETE /api/products/:id - Ta bort produkt
+// DELETE /api/products/:id - Ta bort produkt (soft delete)
 
 productsRouter.delete('/:id', async (req, res) => {
   try {
@@ -158,8 +159,9 @@ productsRouter.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Produkten hittades inte' })
     }
 
-    await db.product.delete({
-      where: { id }
+    await db.product.update({
+      where: { id },
+      data: { isDeleted: true }
     })
 
     res.json({ message: 'Produkten har tagits bort' })
