@@ -51,7 +51,10 @@ export default function ProductFormPage() {
 
   const isValidImagePath = (path: string): boolean => {
     const trimmed = path.trim()
-    if (trimmed.startsWith('/assets/')) return true
+    // Acceptera lokala vägar
+    if (trimmed.startsWith('/src/assets/bilder/')) return true
+    if (trimmed.startsWith('/assets/bilder/')) return true
+    // Eller URL
     try {
       new URL(trimmed)
       return true
