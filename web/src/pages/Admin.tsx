@@ -40,11 +40,22 @@ export default function Admin() {
   const handleDelete = async (id: number) => {
     if (!confirm('Vill du verkligen ta bort produkten?')) return
 
-    await fetch(`/api/products/${id}`, {
-      method: 'DELETE',
-    })
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+      })
 
-    fetchProducts()
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error || 'Kunde inte ta bort produkten')
+        return
+      }
+
+      fetchProducts()
+    } catch (error) {
+      console.error(error)
+      alert('Något gick fel vid borttagning')
+    }
   }
 
   if (loading) {
